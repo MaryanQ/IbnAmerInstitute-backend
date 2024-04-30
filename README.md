@@ -18,7 +18,7 @@ npm install
 2. Derefter kan programmet åbnes via:
 
 ```bash
-npm start
+npm  run start
 ```
 
 Så kører backenden! Du skulle nu være i stand til at se data på din lokalt åbnede frontend.
