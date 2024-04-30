@@ -18,7 +18,14 @@ npm install
 2. Derefter kan programmet åbnes via:
 
 ```bash
-npm start
+npm  run start
+```
+
+3. login til backend
+
+```bash
+brugernavn: test@tester.dk
+adgangskode: test123
 ```
 
 Så kører backenden! Du skulle nu være i stand til at se data på din lokalt åbnede frontend.
