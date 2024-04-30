@@ -1,5 +1,3 @@
-// models/student.js
-
 import dbConfig from "../../db-connect.js";
 
 const Student = {

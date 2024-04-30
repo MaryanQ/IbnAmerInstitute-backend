@@ -28,7 +28,7 @@ const Attendance = {
           result(null, res[0]);
           return;
         }
-        // Attendance with the specified id not found
+
         result({ kind: "not_found" }, null);
       }
     );
@@ -64,7 +64,6 @@ const Attendance = {
           return;
         }
         if (res.affectedRows == 0) {
-          // Attendance with the specified id not found
           result({ kind: "not_found" }, null);
           return;
         }
@@ -85,7 +84,6 @@ const Attendance = {
           return;
         }
         if (res.affectedRows == 0) {
-          // Attendance with the specified id not found
           result({ kind: "not_found" }, null);
           return;
         }

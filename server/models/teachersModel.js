@@ -1,5 +1,3 @@
-// models/Teachers.js
-
 import dbConfig from "../../db-connect.js";
 
 const Teacher = {

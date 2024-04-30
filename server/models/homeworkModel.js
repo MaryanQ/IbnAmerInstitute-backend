@@ -1,4 +1,3 @@
-// models/Homework.js
 import dbConfig from "../../db-connect.js";
 
 const Homework = {
@@ -29,7 +28,7 @@ const Homework = {
           result(null, res[0]);
           return;
         }
-        // Homework with the specified id not found
+
         result({ kind: "not_found" }, null);
       }
     );
@@ -58,7 +57,6 @@ const Homework = {
           return;
         }
         if (res.affectedRows == 0) {
-          // Homework with the specified id not found
           result({ kind: "not_found" }, null);
           return;
         }
@@ -79,7 +77,6 @@ const Homework = {
           return;
         }
         if (res.affectedRows == 0) {
-          // Homework with the specified id not found
           result({ kind: "not_found" }, null);
           return;
         }

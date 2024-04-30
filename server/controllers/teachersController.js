@@ -1,4 +1,3 @@
-// controllers/teacherController.js
 import Teacher from "../models/teachersModel.js";
 
 const getAllTeachers = (req, res) => {

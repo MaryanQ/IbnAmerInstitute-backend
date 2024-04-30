@@ -1,10 +1,6 @@
-import mysql from "mysql2"; // using mysql2 - installed npm library
+import mysql from "mysql2";
 import "dotenv/config";
 import fs from "fs";
-
-// using the variables from the .env file
-// and creates the connection to database
-// Use the certificate as needed in your application
 
 const dbConfig = mysql.createConnection({
   host: process.env.MYSQL_HOST,

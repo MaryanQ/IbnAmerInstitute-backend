@@ -1,6 +1,6 @@
 # ANM - IBN AMER
 
-Backend af hjemmeside til IBN AMER.
+Backend af hjemmeside til IBNAMER.
 
 Den deployede hjemmeside kan tilgås her:
 //LINK
@@ -32,6 +32,6 @@ Så kører backenden! Du skulle nu være i stand til at se data på din lokalt �
 
 Link til frontend repository:
 
-//LINK
+https://proud-stone-0ef859703.5.azurestaticapps.net/
 
-## Lavet af ANM - Aisha, Maryan og Naima
+## Lavet af ANM - Aisha, Marriam og Naima

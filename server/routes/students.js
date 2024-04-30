@@ -1,23 +1,12 @@
 import { Router } from "express";
-import mysql from "mysql2";
 import dbConfig from "../../db-connect.js";
-
-import {
-  getAllStudents,
-  getStudentById,
-  createStudent,
-  updateStudentById,
-  deleteStudentById,
-} from "../controllers/studentsController.js";
 
 const studentsRouter = Router();
 
-// Fetch all students
 studentsRouter.get("/", (req, res) => {
   const { gender } = req.query;
   let queryString = "SELECT * FROM students";
 
-  // Check if gender parameter is provided
   if (gender) {
     queryString += ` WHERE gender = '${gender}'`;
   }
@@ -55,18 +44,15 @@ studentsRouter.get("/:id", async (req, res) => {
   }
 });
 
-// Create a new student
 studentsRouter.post("/", async (req, res) => {
   const { firstname, lastname, email, gender, number, course_name } = req.body; // Added course_name
   if (!firstname || !lastname || !email || !gender || !number || !course_name) {
-    // Check for course_name
     return res
       .status(400)
       .json({ error: "All fields including course name are required." });
   }
 
   try {
-    // Fetch the course_id based on course_name
     const courseQuery = "SELECT course_id FROM Courses WHERE course_name = ?";
     const [courseResults] = await dbConfig
       .promise()
@@ -77,7 +63,6 @@ studentsRouter.post("/", async (req, res) => {
     }
     const course_id = courseResults[0].course_id;
 
-    // Insert the new student record
     const insertStudentQuery =
       "INSERT INTO Students (firstname, lastname, email, gender, number, course_id) VALUES (?, ?, ?, ?, ?, ?)";
     await dbConfig
@@ -97,13 +82,11 @@ studentsRouter.post("/", async (req, res) => {
   }
 });
 
-// Update an existing student
 studentsRouter.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { firstname, lastname, email, gender, number, course_name } = req.body;
 
   if (!firstname || !lastname || !email || !gender || !number) {
-    // Removed the course_name check for simplicity
     return res
       .status(400)
       .json({ error: "All fields are required and must be valid." });
@@ -142,7 +125,6 @@ studentsRouter.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a student
 studentsRouter.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {

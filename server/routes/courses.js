@@ -1,18 +1,8 @@
 import { Router } from "express";
-import mysql from "mysql2";
 import dbConfig from "../../db-connect.js";
-
-import {
-  getAllCourses,
-  getCourseById,
-  createCourse,
-  updateCourseById,
-  deleteCourseById,
-} from "../controllers/coursesController.js";
 
 const coursesRouter = Router();
 
-// Fetch all courses
 coursesRouter.get("/", (req, res) => {
   dbConfig.query("SELECT * FROM Courses", (err, results) => {
     if (err) {
@@ -24,7 +14,6 @@ coursesRouter.get("/", (req, res) => {
   });
 });
 
-// Get a course by ID
 coursesRouter.get("/:id", (req, res) => {
   const { id } = req.params;
   dbConfig.query(
@@ -63,7 +52,6 @@ coursesRouter.post("/", (req, res) => {
   );
 });
 
-// Update an existing course
 coursesRouter.put("/:id", (req, res) => {
   const { id } = req.params;
   const { course_name } = req.body;
@@ -87,7 +75,6 @@ coursesRouter.put("/:id", (req, res) => {
   );
 });
 
-// Delete a course
 coursesRouter.delete("/:id", (req, res) => {
   const { id } = req.params;
   dbConfig.query(

@@ -1,29 +1,29 @@
-import dbConfig from "./../../db-connect.js";
-import bcrypt from "bcrypt";
+import dbConfig from "../../db-connect.js";
+import jwt from "jsonwebtoken";
 
-const authModel = {
-  findUserByEmail: async (email) => {
-    const sql = "SELECT * FROM login WHERE email = ?";
-    return new Promise((resolve, reject) => {
-      dbConfig.query(sql, [email], (err, result) => {
-        if (err) reject(err);
-        resolve(result);
-      });
+const AuthModel = {
+  loginUser: (email, password, callback) => {
+    const sql = "SELECT * FROM login WHERE email = ? AND password = ?";
+    dbConfig.query(sql, [email, password], (error, results) => {
+      if (error) {
+        return callback(error, null);
+      }
+      if (results.length > 0) {
+        return callback(null, results[0]);
+      } else {
+        return callback(null, null);
+      }
     });
   },
 
-  createUser: async (username, password) => {
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
-    const insertQuery =
-      "INSERT INTO Users (username, passwordHash) VALUES (?, ?)";
-    return new Promise((resolve, reject) => {
-      dbConfig.query(insertQuery, [username, passwordHash], (err, result) => {
-        if (err) reject(err);
-        resolve(result);
-      });
-    });
+  generateToken: (user) => {
+    const token = jwt.sign(
+      { role: "teachers", email: user.email },
+      "jwt_secret_key",
+      { expiresIn: "1d" }
+    );
+    return token;
   },
 };
 
-export default authModel;
+export default AuthModel;

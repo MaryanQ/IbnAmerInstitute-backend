@@ -1,10 +1,9 @@
 import { Router } from "express";
-import mysql from "mysql2";
+
 import dbConfig from "../../db-connect.js";
 
 const homeworkRouter = Router();
 
-// Fetch all homework assignments
 homeworkRouter.get("/", (req, res) => {
   const queryString = "SELECT * FROM Homework";
   dbConfig.query(queryString, (error, results) => {
@@ -17,7 +16,6 @@ homeworkRouter.get("/", (req, res) => {
   });
 });
 
-// Fetch a specific homework assignment by ID
 homeworkRouter.get("/:id", (req, res) => {
   const homeworkId = req.params.id;
   const queryString = "SELECT * FROM Homework WHERE homework_id = ?";
@@ -28,7 +26,7 @@ homeworkRouter.get("/:id", (req, res) => {
     } else if (results.length === 0) {
       res.status(404).json({ message: "Homework assignment not found" });
     } else {
-      res.json(results[0]); // Return the first and only homework assignment in the array
+      res.json(results[0]);
     }
   });
 });
@@ -43,17 +41,14 @@ homeworkRouter.post("/", (req, res) => {
     completion_date,
   } = req.body;
 
-  // Basic validation to ensure required fields are present
   if (!assignment_name || !description || !due_date) {
     return res.status(400).json({
       error: "Assignment name, description, and due date are required.",
     });
   }
 
-  // Convert is_completed to a boolean value if it's not already
   const isCompletedBoolean = is_completed === true || is_completed === "true";
 
-  // Insert the homework entry now that we have student_id and course_id from URL
   const insertQuery = `
         INSERT INTO Homework
         (course_id, student_id, assignment_name, description, due_date, is_completed, completion_date)
@@ -85,7 +80,6 @@ homeworkRouter.post("/", (req, res) => {
   );
 });
 
-// Update an existing homework assignment
 homeworkRouter.put("/:id", async (req, res) => {
   const { id } = req.params;
   const {
@@ -97,7 +91,6 @@ homeworkRouter.put("/:id", async (req, res) => {
     grade,
   } = req.body;
 
-  // Validate required fields
   if (!assignment_name || !description || !due_date || !grade) {
     return res.status(400).json({ error: "All fields are required." });
   }
@@ -108,7 +101,6 @@ homeworkRouter.put("/:id", async (req, res) => {
       SET assignment_name = ?, description = ?, due_date = ?, is_completed = ?, completion_date = ?, grade = ? 
       WHERE homework_id = ?`;
 
-    // Execute the update query
     await dbConfig
       .promise()
       .query(updateQuery, [
@@ -121,7 +113,6 @@ homeworkRouter.put("/:id", async (req, res) => {
         id,
       ]);
 
-    // Send success response
     res.json({ message: "Homework updated successfully" });
   } catch (error) {
     console.error("Error updating homework:", error);
@@ -129,7 +120,6 @@ homeworkRouter.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a homework assignment
 homeworkRouter.delete("/:id", (req, res) => {
   const homeworkId = req.params.id;
   const deleteQuery = "DELETE FROM Homework WHERE homework_id = ?";

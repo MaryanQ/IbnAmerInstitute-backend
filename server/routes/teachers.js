@@ -1,18 +1,8 @@
 import { Router } from "express";
-import mysql from "mysql2";
 import dbConfig from "../../db-connect.js";
-
-import {
-  getAllTeachers,
-  getTeacherById,
-  createTeacher,
-  updateTeacherById,
-  deleteTeacherById,
-} from "../controllers/teachersController.js";
 
 const teachersRouter = Router();
 
-// Fetch all teachers
 teachersRouter.get("/", (req, res) => {
   const queryString = "SELECT * FROM Teachers ORDER BY firstname;";
   dbConfig.query(queryString, (error, results) => {
@@ -27,7 +17,6 @@ teachersRouter.get("/", (req, res) => {
   });
 });
 
-// Fetch a specific teacher by ID
 teachersRouter.get("/:id", (req, res) => {
   const teacherId = req.params.id;
   const queryString = "SELECT * FROM Teachers WHERE teacher_id = ?";
@@ -46,8 +35,6 @@ teachersRouter.get("/:id", (req, res) => {
   });
 });
 
-// Create a new teacher
-// Create a new teacher
 teachersRouter.post("/", async (req, res) => {
   const { firstname, lastname, email, number, title } = req.body;
   if (
@@ -77,7 +64,6 @@ teachersRouter.post("/", async (req, res) => {
   }
 });
 
-// Update an existing teacher
 teachersRouter.put("/:id", (req, res) => {
   const { id } = req.params;
   const { firstname, lastname, email, number, title } = req.body;
@@ -115,7 +101,6 @@ teachersRouter.put("/:id", (req, res) => {
   );
 });
 
-// Delete a teacher
 teachersRouter.delete("/:id", (req, res) => {
   const teacherId = req.params.id;
   const deleteQuery = "DELETE FROM Teachers WHERE teacher_id = ?";

@@ -1,4 +1,3 @@
-// models/Courses.js
 import dbConfig from "../../db-connect.js";
 
 const Course = {
@@ -29,7 +28,7 @@ const Course = {
           result(null, res[0]);
           return;
         }
-        // Course with the specified id not found
+
         result({ kind: "not_found" }, null);
       }
     );
@@ -58,7 +57,6 @@ const Course = {
           return;
         }
         if (res.affectedRows == 0) {
-          // Course with the specified id not found
           result({ kind: "not_found" }, null);
           return;
         }
@@ -76,7 +74,6 @@ const Course = {
         return;
       }
       if (res.affectedRows == 0) {
-        // Course with the specified id not found
         result({ kind: "not_found" }, null);
         return;
       }

@@ -4,8 +4,6 @@ import dbConfig from "../../db-connect.js";
 
 const classesRouter = Router();
 
-// Fetch all classes
-// Fetch all classes
 classesRouter.get("/", (req, res) => {
   dbConfig.query("SELECT * FROM Classes", (err, results) => {
     if (err) {
@@ -17,7 +15,6 @@ classesRouter.get("/", (req, res) => {
   });
 });
 
-// Get a class by ID
 classesRouter.get("/:id", (req, res) => {
   const { id } = req.params;
   dbConfig.query(
@@ -36,11 +33,9 @@ classesRouter.get("/:id", (req, res) => {
   );
 });
 
-// Add a new class
 classesRouter.post("/", (req, res) => {
   const { courseName, teacherName, email, duration } = req.body;
 
-  // Check if required fields are provided
   if (!courseName || !teacherName || !email || !duration) {
     return res.status(400).json({
       error: "Course name, teacher name, email, and duration are required",
@@ -97,7 +92,6 @@ classesRouter.post("/", (req, res) => {
   );
 });
 
-// Update an existing class
 classesRouter.put("/:id", (req, res) => {
   const { id } = req.params;
   const { course_id, teacher_id, duration } = req.body;
@@ -123,7 +117,6 @@ classesRouter.put("/:id", (req, res) => {
   );
 });
 
-// Delete a class
 classesRouter.delete("/:id", (req, res) => {
   const { id } = req.params;
   dbConfig.query(

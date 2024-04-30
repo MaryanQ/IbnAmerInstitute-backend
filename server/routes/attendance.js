@@ -1,14 +1,5 @@
 import { Router } from "express";
-import mysql from "mysql2";
 import dbConfig from "../../db-connect.js";
-
-import {
-  getAllAttendances,
-  getAttendanceById,
-  createAttendance,
-  updateAttendanceById,
-  deleteAttendanceById,
-} from "../controllers/attendanceController.js";
 
 const attendanceRouter = Router();
 
@@ -41,11 +32,9 @@ attendanceRouter.get("/:id", (req, res) => {
   });
 });
 
-// Create a new attendance record
 attendanceRouter.post("/", (req, res) => {
   const { student_id, attendance_date, is_present } = req.body;
 
-  // Convert is_present to a boolean value if it's not already
   const isPresentBoolean = is_present === true || is_present === "true";
 
   if (!student_id || !attendance_date || is_present === undefined) {
@@ -75,12 +64,10 @@ attendanceRouter.post("/", (req, res) => {
   );
 });
 
-// Update an attendance record by student ID and attendance ID
 attendanceRouter.put("/:student_id", (req, res) => {
   const { student_id, attendance_id } = req.params;
   const { class_id, attendance_date, is_present } = req.body;
 
-  // Convert is_present to a boolean value if it's not already
   const isPresentBoolean = is_present === true || is_present === "true";
 
   if (!attendance_date || is_present === undefined) {
