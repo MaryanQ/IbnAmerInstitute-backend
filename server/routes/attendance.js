@@ -41,21 +41,6 @@ attendanceRouter.get("/:id", (req, res) => {
   });
 });
 
-attendanceRouter.get("/:id/history", (req, res) => {
-  const studentId = req.params.id;
-  const queryString =
-    "SELECT * FROM AttendanceHistory WHERE student_id = ? ORDER BY updated_at DESC";
-
-  dbConfig.query(queryString, [studentId], (error, results) => {
-    if (error) {
-      console.error("Error fetching attendance history:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      res.json(results); // Return the history array
-    }
-  });
-});
-
 // Create a new attendance record
 attendanceRouter.post("/", (req, res) => {
   const { student_id, attendance_date, is_present } = req.body;

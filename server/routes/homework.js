@@ -33,22 +33,6 @@ homeworkRouter.get("/:id", (req, res) => {
   });
 });
 
-// Fetch the history for a specific homework assignment
-homeworkRouter.get("/:id/history", (req, res) => {
-  const homeworkId = req.params.id;
-  const queryString =
-    "SELECT * FROM HomeworkHistory WHERE homework_id = ? ORDER BY updated_at DESC";
-
-  dbConfig.query(queryString, [homeworkId], (error, results) => {
-    if (error) {
-      console.error("Error fetching homework history:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      res.json(results); // Return the history array
-    }
-  });
-});
-
 homeworkRouter.post("/", (req, res) => {
   const { studentId, courseId } = req.params;
   const {
@@ -102,47 +86,47 @@ homeworkRouter.post("/", (req, res) => {
 });
 
 // Update an existing homework assignment
-homeworkRouter.put("/:id", (req, res) => {
+homeworkRouter.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const homeworkToUpdate = req.body;
-  const selectQuery = "SELECT * FROM Homework WHERE homework_id = ?";
+  const {
+    assignment_name,
+    description,
+    due_date,
+    is_completed,
+    completion_date,
+    grade,
+  } = req.body;
 
-  // Get the current homework record
-  dbConfig.query(selectQuery, [id], (error, results) => {
-    if (error) {
-      console.error("Error fetching homework for history:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
-    } else if (results.length > 0) {
-      // Insert current homework into HomeworkHistory before updating
-      const insertHistoryQuery = "INSERT INTO HomeworkHistory SET ?";
-      dbConfig.query(insertHistoryQuery, results[0], (error, results) => {
-        if (error) {
-          console.error("Error saving homework history:", error);
-          return res
-            .status(500)
-            .json({ error: "Error saving homework history" });
-        }
+  // Validate required fields
+  if (!assignment_name || !description || !due_date || !grade) {
+    return res.status(400).json({ error: "All fields are required." });
+  }
 
-        const updateQuery = "UPDATE Homework SET ? WHERE homework_id = ?";
-        dbConfig.query(
-          updateQuery,
-          [homeworkToUpdate, id],
-          (error, results) => {
-            if (error) {
-              console.error("Error updating homework:", error);
-              return res.status(500).json({ error: "Error updating homework" });
-            }
-            return res.json({
-              message: "Homework updated successfully",
-              historyId: results.insertId,
-            });
-          }
-        );
-      });
-    } else {
-      res.status(404).json({ message: "Homework assignment not found" });
-    }
-  });
+  try {
+    const updateQuery = `
+      UPDATE Homework 
+      SET assignment_name = ?, description = ?, due_date = ?, is_completed = ?, completion_date = ?, grade = ? 
+      WHERE homework_id = ?`;
+
+    // Execute the update query
+    await dbConfig
+      .promise()
+      .query(updateQuery, [
+        assignment_name,
+        description,
+        due_date,
+        is_completed,
+        completion_date,
+        grade,
+        id,
+      ]);
+
+    // Send success response
+    res.json({ message: "Homework updated successfully" });
+  } catch (error) {
+    console.error("Error updating homework:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 // Delete a homework assignment
