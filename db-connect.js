@@ -1,4 +1,5 @@
-import mysql from "./server/node_modules/mysql2";
+import mysql from "mysql2";
+
 import "dotenv/config";
 import fs from "fs";
 
