@@ -23,7 +23,7 @@ npm  run start
 
 3. login til backend
 
-   ```bash
+```bash
 brugernavn: test@tester.dk
 adgangskode: test123
 ```
