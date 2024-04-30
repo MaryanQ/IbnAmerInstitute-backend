@@ -21,10 +21,12 @@ npm install
 npm  run start
 ```
 
-login til backend
+3. login til backend
+
+   ```bash
 brugernavn: test@tester.dk
 adgangskode: test123
-
+```
 
 Så kører backenden! Du skulle nu være i stand til at se data på din lokalt åbnede frontend.
 
