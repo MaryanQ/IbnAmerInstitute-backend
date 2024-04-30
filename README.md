@@ -21,6 +21,11 @@ npm install
 npm  run start
 ```
 
+login til backend
+brugernavn: test@tester.dk
+adgangskode: test123
+
+
 Så kører backenden! Du skulle nu være i stand til at se data på din lokalt åbnede frontend.
 
 Link til frontend repository:
