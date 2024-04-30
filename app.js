@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(
   cors({
-    origin: "http://localhost:5174", // Ensure this exactly matches the client's origin
+    origin: "http://localhost:5173", // Ensure this exactly matches the client's origin
     methods: ["GET", "POST", "PUT", "DELETE"], // Adjust according to your needs
     credentials: true, // if you are using cookies or authentication
   })
