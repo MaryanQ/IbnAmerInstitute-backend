@@ -21,7 +21,7 @@ npm install
 npm  run start
 ```
 
-3. login til backend
+3. Login til backend
 
 ```bash
 brugernavn: test@tester.dk
