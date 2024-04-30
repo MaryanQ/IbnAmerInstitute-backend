@@ -5,12 +5,12 @@ import helmet from "helmet";
 
 import authRouter from "./server/routes/auth/index.js";
 import studentsRouter from "./server/routes/students.js";
-import teachersRouter from "./server/Routes/teachers.js";
+import teachersRouter from "./server/routes/teachers.js";
 import attendanceRouter from "./server/routes/attendance.js";
-import homeworkRouter from "./server/Routes/homework.js";
-import coursesRouter from "./server/Routes/courses.js";
-import classesRouter from "./server/Routes/classes.js";
-import studentClassesRouter from "./server/Routes/studentClasses.js";
+import homeworkRouter from "./server/routes/homework.js";
+import coursesRouter from "./server/routes/courses.js";
+import classesRouter from "./server/routes/classes.js";
+import studentClassesRouter from "./server/routes/studentClasses.js";
 
 const app = express();
 const port = 8080;
