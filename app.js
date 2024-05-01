@@ -11,7 +11,7 @@ import homeworkRouter from "./server/routes/homework.js";
 import coursesRouter from "./server/routes/courses.js";
 import classesRouter from "./server/routes/classes.js";
 
-import { authController } from "./server/controllers/authController.js";
+import { loginUser, logoutUser } from "./server/controllers/authController.js";
 
 import {
   getAllAttendances,
@@ -65,32 +65,35 @@ app.use("/homework", homeworkRouter);
 app.use("/courses", coursesRouter);
 app.use("/classes", classesRouter);
 
-app.post("/login", authController.login);
-app.post("/logout", authController.logout);
+authRouter.post("/logout", logoutUser);
+authRouter.post("/login", loginUser);
 
-app.get("/attendance", getAllAttendances);
-app.get("/attendance/:id", getAttendanceById);
-app.post("/attendance", createAttendance);
-app.put("/attendance/:id", updateAttendanceById);
-app.delete("/attendance/:id", deleteAttendanceById);
+studentsRouter.get("/", getAllStudents);
+studentsRouter.get("/:id", getStudentById);
+studentsRouter.post("/", createStudent);
+studentsRouter.put("/:id", updateStudentById);
+studentsRouter.delete("/:id", deleteStudentById);
 
-app.get("/courses", getAllCourses);
-app.get("/courses/:id", getCourseById);
-app.post("/courses", createCourse);
-app.put("/courses/:id", updateCourseById);
-app.delete("/courses/:id", deleteCourseById);
+// Define teacher routes
+teachersRouter.get("/", getAllTeachers);
+teachersRouter.get("/:id", getTeacherById);
+teachersRouter.post("/", createTeacher);
+teachersRouter.put("/:id", updateTeacherById);
+teachersRouter.delete("/:id", deleteTeacherById);
 
-app.get("/students", getAllStudents);
-app.get("/students/:id", getStudentById);
-app.post("/students", createStudent);
-app.put("/students/:id", updateStudentById);
-app.delete("/students/:id", deleteStudentById);
+coursesRouter.get("/", getAllCourses);
+coursesRouter.get("/:id", getCourseById);
+coursesRouter.post("/", createCourse);
+coursesRouter.put("/:id", updateCourseById);
+coursesRouter.delete("/:id", deleteCourseById);
 
-app.get("/", getAllTeachers);
-app.get("/:id", getTeacherById);
-app.post("/", createTeacher);
-app.put("/:id", updateTeacherById);
-app.delete("/:id", deleteTeacherById);
+// Define attendance routes
+attendanceRouter.get("/", getAllAttendances);
+attendanceRouter.get("/:id", getAttendanceById);
+attendanceRouter.get("/:id", getAttendanceById);
+attendanceRouter.post("/", createAttendance);
+attendanceRouter.put("/:id", updateAttendanceById);
+attendanceRouter.delete("/:id", deleteAttendanceById);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

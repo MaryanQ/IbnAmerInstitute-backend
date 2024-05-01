@@ -1,53 +1,39 @@
-import userModel from "../models/authModel.js";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 
-const authController = {
-  login: async function (req, res) {
-    const { email, password } = req.body;
-    try {
-      const result = await userModel.findUserByEmail(email);
-      if (result.length > 0) {
-        const user = result[0];
-        const isMatch = await bcrypt.compare(password, user.passwordHash);
-        if (isMatch) {
-          const token = jwt.sign(
-            { role: "teachers", email: user.email },
-            process.env.JWT_SECRET,
-            { expiresIn: "1d" }
-          );
-          res.cookie("token", token, { httpOnly: true });
-          res.json({ loginStatus: true });
-        } else {
-          res.json({ loginStatus: false, Error: "Wrong email or password" });
-        }
-      } else {
-        res.json({ loginStatus: false, Error: "User not found" });
-      }
-    } catch (err) {
-      console.error(err);
-      res.json({ loginStatus: false, Error: "Query error" });
-    }
-  },
-
-  register: async function (req, res) {
+const loginUser = async (req, res) => {
+  try {
     const { username, password } = req.body;
-    if (!username || !password) {
-      return res.status(400).send("Username and password are required");
-    }
-    try {
-      const result = await userModel.createUser(username, password);
-      res.status(201).send("User created successfully");
-    } catch (err) {
-      console.error("Error during registration:", err);
-      res.status(500).send("Server error during registration");
-    }
-  },
+    const user = await User.findOne({ username });
 
-  logout: function (req, res) {
-    res.clearCookie("token", { httpOnly: true, secure: true, path: "/" });
-    res.status(200).json({ status: "Success", message: "Logout successful" });
-  },
+    if (!user || !bcrypt.compareSync(password, user.passwordHash)) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign(
+      { userId: user.id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
-export { authController };
+const logoutUser = async (req, res) => {
+  try {
+    // Clear the token stored on the client side
+    res.clearCookie("token");
+
+    // Optionally, you can send a response indicating successful logout
+    res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export { loginUser, logoutUser };
