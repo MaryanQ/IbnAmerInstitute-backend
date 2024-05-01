@@ -4,24 +4,37 @@ import jwt from "jsonwebtoken";
 
 const authRouter = Router();
 
-authRouter.post("/login", (req, res) => {
-  const { email, password } = req.body;
-  const sql = "SELECT * from login Where email = ? and password = ?";
-  console.log("SQL Query:", sql);
+authRouter.post("/login", async (req, res) => {
+  const { username, password } = req.body;
 
-  dbConfig.query(sql, [email, password], (err, result) => {
-    if (err) return res.json({ loginStatus: false, Error: "Query error" });
-    if (result.length > 0) {
-      const email = result[0].email;
-      const token = jwt.sign(
-        { role: "teachers", email: email },
-        "jwt_secret_key",
-        { expiresIn: "1d" }
-      );
-      res.cookie("token", token);
-      return res.json({ loginStatus: true });
+  const queryString = "SELECT * FROM Users WHERE username = ?";
+
+  dbConfig.query(queryString, [username], (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      res
+        .status(500)
+        .json({ error: "An error occurred while fetching user data" });
+      return;
+    }
+
+    if (results.length > 0) {
+      const user = results[0]; // Get the first result of the query
+      if (bcrypt.compareSync(password, user.passwordHash)) {
+        // Correct password, create JWT
+        const token = jwt.sign(
+          { userId: user.id, username: user.username },
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" }
+        );
+        res.json({ token });
+      } else {
+        // Incorrect password
+        res.status(401).send("Invalid credentials");
+      }
     } else {
-      return res.json({ loginStatus: false, Error: "wrong email or password" });
+      // No user found
+      res.status(404).send("User not found");
     }
   });
 });
